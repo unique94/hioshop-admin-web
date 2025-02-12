@@ -485,6 +485,7 @@ export default {
     handleSuccess() {},
     uploadIndexImg(request) {
       const file = request.file;
+      console.log('开始上传图片:', file);
       lrz(file)
         .then((rst) => {
           const config = {
@@ -501,7 +502,10 @@ export default {
           formData.append("token", this.picData.token);
           formData.append("key", fileName);
           this.$http.post(this.qiniuZone, formData, config).then((res) => {
+            console.log('上传成功响应:', res);
             this.handleUploadListSuccess(res.data);
+          }).catch((error) => {
+            console.error('上传失败:', error);
           });
         })
         .catch(function (err) {
@@ -510,16 +514,20 @@ export default {
     },
     handleUploadListSuccess(res) {
       let url = this.url;
-      this.infoForm.list_pic_url = url + res.key;
-      console.log(this.infoForm.list_pic_url);
-      this.axios
-        .post("goods/uploadHttpsImage", {
-          url: this.infoForm.list_pic_url,
-        })
-        .then((response) => {
-          let lastUrl = response.data.data;
-          this.infoForm.https_pic_url = lastUrl;
-        });
+      let httpsUrl = url + res.key;
+      this.infoForm.list_pic_url = httpsUrl;
+      this.infoForm.https_pic_url = httpsUrl;
+      // TODO. DEMO 暂时使用公开bucket.成熟方案是使用私有链
+      console.log(httpsUrl);
+
+      // this.axios
+      //   .post("goods/uploadHttpsImage", {
+      //     url: this.infoForm.list_pic_url,
+      //   })
+      //   .then((response) => {
+      //     let lastUrl = response.data.data;
+      //     this.infoForm.https_pic_url = lastUrl;
+      //   });
     },
     onRemoveHandler(index) {
       let that = this;
@@ -537,6 +545,7 @@ export default {
     },
     uploadGalleryImg(request) {
       const file = request.file;
+      console.log('开始上传图片:', file);
       lrz(file)
         .then((rst) => {
           const config = {
@@ -553,7 +562,10 @@ export default {
           formData.append("token", this.picData.token);
           formData.append("key", fileName);
           this.$http.post(this.qiniuZone, formData, config).then((res) => {
+            console.log('轮播图上传成功响应:', res);
             this.handleUploadGallerySuccess(res.data);
+          }).catch((error) => {
+            console.error('上传失败:', error);
           });
         })
         .catch(function (err) {
@@ -859,6 +871,7 @@ export default {
     },
     uploadDetailsImg(request) {
       const file = request.file;
+      console.log('开始上传图片:', file);
       lrz(file)
         .then((rst) => {
           const config = {
@@ -875,7 +888,10 @@ export default {
           formData.append("token", this.picData.token);
           formData.append("key", fileName);
           this.$http.post(this.qiniuZone, formData, config).then((res) => {
+            console.log('上传成功响应:', res);
             this.handleUploadDetailSuccess(res.data);
+          }).catch((error) => {
+            console.error('上传失败:', error);
           });
         })
         .catch(function (err) {

@@ -25,5 +25,13 @@ module.exports = [
         }
       }
     }
+  },
+  {
+    url: '/vue-admin-template/upload',
+    type: 'post',
+    response: config => {
+      console.log('收到上传请求:', config.body);
+      // ... 处理逻辑 ...
+    }
   }
 ]
