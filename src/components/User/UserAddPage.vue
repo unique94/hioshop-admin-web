@@ -49,6 +49,16 @@
                             </el-select>
                         </template>
                     </el-table-column>
+                    <el-table-column prop="balance" label="国学豆" width="120">
+                        <template slot-scope="scope">
+                            <el-input 
+                                size="mini" 
+                                v-model="scope.row.balance" 
+                                placeholder="国学豆"
+                                @blur="updateBalance(scope.$index, scope.row)">
+                            </el-input>
+                        </template>
+                    </el-table-column>
                     <el-table-column prop="register_time" label="注册时间" width="180"></el-table-column>
                     <el-table-column prop="last_login_time" label="最近登录" width="180"></el-table-column>
                 </el-table>
@@ -335,10 +345,7 @@
                     }
                 })
             },
-            submitUserLevel(index, row, selectedLevelId) {
-                console.log('用户ID:', row.id);  
-                console.log('选中的等级ID:', selectedLevelId);  
-                
+            submitUserLevel(index, row, selectedLevelId) {               
                 this.axios.post('user/updateUserLevel', {
                     user_id: row.id,               // 用户ID
                     user_level_id: selectedLevelId  // 选中的用户等级ID
@@ -352,6 +359,24 @@
                         this.$message({
                             type: 'error',
                             message: '修改失败'
+                        })
+                    }
+                })
+            },
+            updateBalance(index, row) {
+                this.axios.post('user/updateBalance', {
+                    user_id: row.id, 
+                    balance: row.balance
+                }).then((response) => {
+                    if (response.data.errno === 0) {
+                        this.$message({
+                            type: 'success',
+                            message: '国学豆修改成功!'
+                        });
+                    } else {
+                        this.$message({
+                            type: 'error',
+                            message: response.data.errmsg || '修改失败'
                         })
                     }
                 })
