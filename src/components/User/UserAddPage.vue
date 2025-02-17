@@ -364,22 +364,35 @@
                 })
             },
             updateBalance(index, row) {
-                this.axios.post('user/updateBalance', {
-                    user_id: row.id, 
-                    balance: row.balance
-                }).then((response) => {
-                    if (response.data.errno === 0) {
-                        this.$message({
-                            type: 'success',
-                            message: '国学豆修改成功!'
-                        });
-                    } else {
-                        this.$message({
-                            type: 'error',
-                            message: response.data.errmsg || '修改失败'
-                        })
-                    }
-                })
+                this.$confirm(`确定要将用户 ${row.nickname || row.name || 'ID:' + row.id} 的国学豆修改为 ${row.balance} 吗?`, '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.axios.post('user/updateBalance', {
+                        user_id: row.id, 
+                        balance: row.balance
+                    }).then((response) => {
+                        if (response.data.errno === 0) {
+                            this.$message({
+                                type: 'success',
+                                message: '国学豆修改成功!'
+                            });
+                        } else {
+                            this.$message({
+                                type: 'error',
+                                message: response.data.errmsg || '修改失败'
+                            })
+                        }
+                    })
+                }).catch(() => {
+                    // 用户点击取消，恢复原值
+                    this.getInfo();
+                    this.$message({
+                        type: 'info',
+                        message: '已取消修改'
+                    });
+                });
             },
             handlePageChange(val) {
                 this.page = val;
@@ -427,7 +440,8 @@
                     }
                 }).then((response) => {
                     let info = response.data.data;
-                    console.log(info);
+                    // 清空数组后再添加新数据
+                    this.userData = [];
                     this.userData.push(info);
                 })
             },

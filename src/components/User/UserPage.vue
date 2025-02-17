@@ -27,14 +27,14 @@
 					</el-table-column>
 					<!--<el-table-column prop="username" label="会员名称">-->
 					<!--</el-table-column>-->
-					<el-table-column prop="nickname" label="昵称">
+					<el-table-column prop="nickname" label="昵称" width="180">
 						<template slot-scope="scope">
 							<el-input v-model="scope.row.nickname" placeholder="昵称" @blur="submitNick(scope.$index, scope.row)"></el-input>
 						</template>
 					</el-table-column>
-					<el-table-column prop="gender" label="性别" width="120">
+					<el-table-column prop="mobile" label="电话" width="180">
 						<template slot-scope="scope">
-							{{ scope.row.gender == 2 ? '女' : '男' }}
+							{{ scope.row.mobile || '' }}
 						</template>
 					</el-table-column>
 					<!--<el-table-column prop="mobile" label="手机号"></el-table-column>-->
@@ -43,8 +43,13 @@
 							{{ scope.row.user_level_name || '普通用户' }}
 						</template>
 					</el-table-column>
-					<el-table-column prop="register_time" label="注册时间" width="180">
+					<el-table-column prop="balance" label="国学豆" width="120">
+						<template slot-scope="scope">
+							{{ scope.row.balance || '' }}
+						</template>
 					</el-table-column>
+					<!-- <el-table-column prop="register_time" label="注册时间" width="180">
+					</el-table-column> -->
 					<el-table-column prop="last_login_time" label="最近登录" width="180">
 					</el-table-column>
 					<el-table-column label="操作">
