@@ -38,6 +38,16 @@
 						</template>
 					</el-table-column>
 					<!--<el-table-column prop="mobile" label="手机号"></el-table-column>-->
+					<el-table-column prop="user_level_name" label="用户等级" width="120">
+						<template slot-scope="scope">
+							{{ scope.row.user_level_name || '普通用户' }}
+						</template>
+					</el-table-column>
+					<el-table-column prop="balance" label="国学积分" width="120">
+						<template slot-scope="scope">
+							{{ scope.row.balance || 0 }}
+						</template>
+					</el-table-column>
 					<el-table-column prop="register_time" label="注册时间" width="180">
 					</el-table-column>
 					<el-table-column prop="last_login_time" label="最近登录" width="180">
