@@ -37,6 +37,18 @@
                             {{ scope.row.gender == 2 ? '女' : '男' }}
                         </template>
                     </el-table-column>
+                    <el-table-column prop="user_level" label="用户等级" width="120">
+                        <template slot-scope="scope">
+                            <el-select v-model="scope.row.user_level_name" size="mini" @change="(val) => submitUserLevel(scope.$index, scope.row, val)">
+                                <el-option 
+                                    v-for="level in userLevels" 
+                                    :key="level.id"
+                                    :label="level.name"
+                                    :value="level.id">
+                                </el-option>
+                            </el-select>
+                        </template>
+                    </el-table-column>
                     <el-table-column prop="register_time" label="注册时间" width="180"></el-table-column>
                     <el-table-column prop="last_login_time" label="最近登录" width="180"></el-table-column>
                 </el-table>
@@ -231,6 +243,7 @@
                 data_money: [],
                 data_sum: [],
                 forlist: [11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0],
+                userLevels: [],
             }
         },
         methods: {
@@ -322,6 +335,27 @@
                     }
                 })
             },
+            submitUserLevel(index, row, selectedLevelId) {
+                console.log('用户ID:', row.id);  
+                console.log('选中的等级ID:', selectedLevelId);  
+                
+                this.axios.post('user/updateUserLevel', {
+                    user_id: row.id,               // 用户ID
+                    user_level_id: selectedLevelId  // 选中的用户等级ID
+                }).then((response) => {
+                    if (response.data.errno === 0) {
+                        this.$message({
+                            type: 'success',
+                            message: '用户等级修改成功!'
+                        });
+                    } else {
+                        this.$message({
+                            type: 'error',
+                            message: '修改失败'
+                        })
+                    }
+                })
+            },
             handlePageChange(val) {
                 this.page = val;
                 //保存到localStorage
@@ -368,6 +402,7 @@
                     }
                 }).then((response) => {
                     let info = response.data.data;
+                    console.log(info);
                     this.userData.push(info);
                 })
             },
@@ -442,6 +477,13 @@
                     this.options = response.data.data;
                 })
             },
+            getUserLevels() {
+                this.axios.get('user/getUserLevels').then((response) => {
+                    if (response.data.errno === 0) {
+                        this.userLevels = response.data.data;
+                    }
+                })
+            },
         },
         components: {},
         mounted() {
@@ -450,6 +492,7 @@
             this.getOrder();
             this.datainfo();
             this.getAllRegion();
+            this.getUserLevels();
             // this.root = api.rootUrl;
             if (!this.loginInfo) {
                 this.loginInfo = JSON.parse(window.localStorage.getItem('userInfo') || null);
